@@ -53,7 +53,7 @@ def menu():
         add_list(provider, 'listtodaysgames', provider, desc=leaders, icon=thumb)
 
 
-def list_games(date, provider, previous=False, highlights=False):
+def list_games(date, provider, previous=False, highlight=False):
     dategames = games(date, provider)
 
     if len(dategames) < 1:
@@ -77,7 +77,7 @@ def list_games(date, provider, previous=False, highlights=False):
             title = "[I]Previous Games[/I]"
         add_list(title, action, provider)
 
-    if highlights:
+    if highlight:
         add_list("[I]Highlights[/I]", "listhighlightsgroup", provider)
 
 
@@ -232,7 +232,7 @@ elif action == "listrecaps":
 elif action == "listteams":
     highlights.teamList(params['mode'])
 elif action == "listteam":
-    highlights.team(params['url'], params['mode'])
+    highlights.teamTopics(params['url'], params['mode'])
 elif action == "listteam_subdir":
     highlights.teamSub(params['url'], params['mode'])
 

@@ -4,15 +4,15 @@ import socket
 import sys
 import time
 from datetime import datetime, timedelta
-
-import requests_cache
+from pytz import reference, timezone
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+
+import requests_cache
 
 import xbmc
 import xbmcgui
 import xbmcplugin
-from pytz import reference, timezone
 from resources.lib.vars import (
     ADDONHANDLE,
     CACHE,

@@ -159,7 +159,7 @@ def teamList(provider):
             add_list(title, "listteam", provider, url=url)
 
 
-def team(url, provider):
+def teamTopics(url, provider):
     if provider == "NHL.tv":
         data = _requests().get(url, timeout=3).text
         soup = BeautifulSoup(data, 'html.parser')
