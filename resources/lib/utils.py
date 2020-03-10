@@ -61,7 +61,7 @@ def asCurrentTz(d, t):
 
 def years(provider):
     start = 2015 if provider == "NHL.tv" else 2017
-    return list(range(start, today().year + 1))
+    return [*range(start, today().year + 1)]
 
 
 def months(year):
@@ -72,9 +72,9 @@ def months(year):
 
 def days(year, month):
     if int(year) == today().year and int(month) == today().month:
-        return list(range(1, today().day))
+        return [*range(1, today().day)]
     r = calendar.monthrange(int(year), int(month))
-    return list(range(1, max(r) + 1))
+    return [*range(1, max(r) + 1)]
 
 
 def today(delta=0):

@@ -53,7 +53,7 @@ def get_nhl_highlights():
                 images = video['image']['cuts']
                 try:
                     thumb = images['1136x640']['src']
-                except:
+                except KeyError:
                     thumb = images[next(iter(images))]['src']
             title_highlights.append(Highlight(blurb, duration, playbacks, thumb, desc))
         highlights.append(HighlightGroup(title, title_highlights))
@@ -81,7 +81,7 @@ def get_recaps(provider, page):
                 images = video['image']['cuts']
                 try:
                     thumb = images['1136x640']['src']
-                except:
+                except KeyError:
                     thumb = images[next(iter(images))]['src']
             url = [x for x in data['playbacks'] if x['name'] == "HTTP_CLOUD_WIRED_60"][0]['url']
             add_list(title, "playhighlight", url=url, desc=desc, icon=thumb, isStream=True)
@@ -113,11 +113,11 @@ def get_recaps(provider, page):
                 # check for 8m condensed games first then 4m recaps if not found
                 try:
                     highlight = data['media']['epgAlternate'][0]['items'][0]
-                except:
+                except LookupError:
                     try:
                         highlight = data['media']['epgAlternate'][1]['items'][0]
-                    except:
-                        log("no recap found", debug=True)
+                    except LookupError:
+                        log("no recaps found", debug=True)
                         continue
 
                 title = re.sub(r"(CG:|\|) ", '', highlight['title'])
@@ -203,7 +203,6 @@ def teamSub(url, provider):
                 thumb = data['image']['cuts']['1136x640']['src'] if IMG_QUALITY != "Off" else ""
             except KeyError:
                 thumb = ""
-                log(f"Failed to get thumbnail: {u}", debug=True)
             add_list(title, "playhighlight", url=url, desc=desc, icon=thumb, isStream=True)
 
     elif provider == "MLB.tv":
@@ -214,7 +213,7 @@ def teamSub(url, provider):
             url = data['advancedCriteria']
             url = f"https://www.mlb.com/data-service/en/search?advancedCriteria={url}"
             key = 'docs'
-        except:
+        except KeyError:
             url = data['selection'][0]['slug']
             url = f"https://www.mlb.com/data-service/en/selection/{url}?$limit=15"
             key = 'items'
@@ -288,13 +287,13 @@ def random_image(provider):
         size = quality.get(IMG_QUALITY, '1136')
 
         for item in soup.find_all("img", class_="article-sidebar-item__img "):
-            item = item.get("data-srcset").split(' ')
+            item = item.get("data-srcset").split()
             # dont fail if the quality sizes change in the future
             try:
                 # unlike mlb, the results arent sorted for easy pickings
                 url = [x for x in item if size in x][0]
                 items.append(url)
-            except:
+            except LookupError:
                 log(f"Failed to find a team image: {size} from {item}", debug=True)
 
     elif provider == "MLB.tv":
@@ -307,6 +306,6 @@ def random_image(provider):
 
         for item in soup.find_all("img", class_="lazyload"):
             # quality should always be 1284x722
-            items.append(item.get("data-srcset").split(' ')[0])
+            items.append(item.get("data-srcset").split()[0])
 
     return random.choice(items) if len(items) > 0 else None
