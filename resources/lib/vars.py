@@ -8,10 +8,12 @@ import xbmcaddon
 ADDONURL     = sys.argv[0]
 ADDONHANDLE  = int(sys.argv[1])
 ADDON        = xbmcaddon.Addon()
+
 ADDONNAME    = ADDON.getAddonInfo('name')
 ADDONID      = ADDON.getAddonInfo('id')
 ADDONPATH    = ADDON.getAddonInfo('path')
 ICON         = ADDON.getAddonInfo('icon')
+
 STRM_QUALITY = ADDON.getSetting('qualityStrm')
 IMG_QUALITY  = ADDON.getSetting('qualityArt')
 DEBUG        = ADDON.getSettingBool('debug')

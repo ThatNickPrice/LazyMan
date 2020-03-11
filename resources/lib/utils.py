@@ -8,6 +8,7 @@ from pytz import reference, timezone
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+import requests
 import requests_cache
 
 import xbmc
@@ -94,7 +95,7 @@ def salt():
 
 
 def head(url, cookies=None):
-    ret = _requests().head(url, cookies=cookies, timeout=3)
+    ret = requests.head(url, cookies=cookies, timeout=3)
     return ret.status_code < 400
 
 

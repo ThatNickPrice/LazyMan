@@ -3,8 +3,7 @@ import re
 from bs4 import BeautifulSoup
 
 from resources.lib.utils import (
-    log, _requests, today, add_list,
-    cacheHr, cacheDay,
+    log, _requests, today, add_list, cacheDay,
 )
 from resources.lib.vars import (
     IMG_QUALITY,
@@ -97,7 +96,7 @@ def get_recaps(provider, page):
             'endDate': today(end).strftime("%Y-%m-%d")
         }
         u = ''.join(MLB_API)
-        gamelist = _requests(cacheHr).get(u, params=query, timeout=3).json()
+        gamelist = _requests().get(u, params=query, timeout=3).json()
 
         if len(gamelist) < 1:
             return
@@ -138,7 +137,7 @@ def get_recaps(provider, page):
 def teamList(provider):
     if provider == "NHL.tv":
         url = f"{NHL_API[0]}/api/v1/teams"
-        data = _requests().get(url, timeout=3).json()
+        data = _requests(cacheDay).get(url, timeout=3).json()
 
         for item in data['teams']:
             team = item['teamName']
@@ -149,7 +148,7 @@ def teamList(provider):
 
     elif provider == "MLB.tv":
         url = f"{MLB_API[0]}/api/v1/teams?sportId=1"
-        data = _requests().get(url, timeout=3).json()
+        data = _requests(cacheDay).get(url, timeout=3).json()
 
         for item in data['teams']:
             team = item['teamName']
@@ -161,7 +160,7 @@ def teamList(provider):
 
 def teamTopics(url, provider):
     if provider == "NHL.tv":
-        data = _requests().get(url, timeout=3).text
+        data = _requests(cacheDay).get(url, timeout=3).text
         soup = BeautifulSoup(data, 'html.parser')
 
         for item in soup.find_all(attrs={'class': 'section-banner__tray-item'}):
@@ -170,7 +169,7 @@ def teamTopics(url, provider):
             add_list(title, "listteam_subdir", provider, url=url)
 
     elif provider == "MLB.tv":
-        data = _requests().get(url, timeout=3).text
+        data = _requests(cacheDay).get(url, timeout=3).text
         soup = BeautifulSoup(data, 'html.parser')
 
         # NOTE: look here if no results found
