@@ -71,10 +71,10 @@ def get_recaps(provider, page):
             content = video['asset_id']
             url = f"https://nhl.bamcontent.com/nhl/id/v1/{content}/details/web-v1.json"
             data = _requests().get(url, timeout=3).json()
-            #date = [x for x in data['keywordsAll'] if x['type'] == 'gameId'][0]['displayName'].split('-')[1]
-            title = [x for x in data['keywordsAll'] if x['type'] == "calendarEventId"][0]['displayName']
-            #duration = data['duration']
-            #title = f"{name} [{duration}]"
+            try:
+                title = [x for x in data['keywordsAll'] if x['type'] == "calendarEventId"][0]['displayName']
+            except:
+                title = [x for x in data['keywordsAll'] if x['type'] == 'gameId'][0]['displayName'].split('-')[0]
             desc = data['bigBlurb']
             if IMG_QUALITY != "Off":
                 images = video['image']['cuts']
